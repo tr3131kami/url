@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discord</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #18191c; /* Discord風のダーク背景 */
+      font-family: 'gg sans', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    /* Discordカラーのモダンなボタン */
+    .discord-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 36px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #ffffff;
+      text-decoration: none;
+      background-color: #5865F2; /* Discord Blurple */
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(88, 101, 242, 0.35);
+      transition: all 0.2s ease-in-out;
+      cursor: pointer;
+    }
+
+    .discord-btn:hover {
+      background-color: #4752C4;
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px rgba(88, 101, 242, 0.5);
+    }
+
+    .discord-btn:active {
+      transform: translateY(-1px);
+    }
+
+    .discord-btn.disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    /* Discordロゴアイコン (SVG) */
+    .discord-icon {
+      width: 28px;
+      height: 28px;
+      fill: currentColor;
+    }
+  </style>
+</head>
+<body>
+
+  <a id="jump-btn" class="discord-btn disabled" href="#" target="_blank" rel="noopener noreferrer">
+    <!-- Discord アイコン -->
+    <svg class="discord-icon" viewBox="0 0 127.14 96.36">
+      <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53TaskC31,46,36,40.31,42.45,40.31C48.92,40.31,54.1,46,53.9,53C53.9,60,48.92,65.69,42.45,65.69ZM84.68,65.69C78.41,65.69,73.26,60,73.26,53C73.26,46,78.41,40.31,84.68,40.31C91.15,40.31,96.33,46,96.13,53C96.13,60,91.15,65.69,84.68,65.69Z"/>
+    </svg>
+    <span>読み込み中...</span>
+  </a>
+
+  <script>
+    // url.txt から URL を読み込んでボタンにセット
+    fetch('./url.txt')
+      .then(response => {
+        if (!response.ok) throw new Error('url.txt が見つかりません');
+        return response.text();
+      })
+      .then(text => {
+        let targetUrl = text.trim();
+        if (targetUrl.includes('url=')) {
+          targetUrl = targetUrl.split('url=')[1].trim();
+        }
+
+        const btn = document.getElementById('jump-btn');
+        btn.href = targetUrl;
+        btn.querySelector('span').textContent = 'Discordに参加する';
+        btn.classList.remove('disabled');
+      })
+      .catch(err => {
+        console.error(err);
+        const btn = document.getElementById('jump-btn');
+        btn.querySelector('span').textContent = 'URL読み込みエラー';
+      });
+  </script>
+</body>
+</html>
